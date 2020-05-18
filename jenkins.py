@@ -8,8 +8,7 @@ import urllib3
 import re
 urllib3.disable_warnings()
 q=queue.Queue()
-#调整判断逻辑
-#判断whoami
+
 file=open('website.txt')
 for x in file.readlines():
         q.put(x.strip())
@@ -76,8 +75,7 @@ def scan():
                                 print(url3+'存在弱口令'+admin+':'+password)
                                 with open('result.txt', 'a') as fff:
                                     fff.write(url3+'存在弱口令'+admin+':'+password + '\n')
-                            else:
-                                pass
+
                         else:
                             pass
                 else:
